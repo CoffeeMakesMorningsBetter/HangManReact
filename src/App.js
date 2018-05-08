@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
-// import randomWords from "random-words";
 
 const Word = ({ letter }) => {
   return <div className="item">{letter}</div>;
+};
+
+const ResetButton = ({ reset }) => {
+  return (
+    <button className="resetButton" onClick={reset}>
+      Reset Game
+    </button>
+  );
 };
 
 class UserInputForm extends Component {
@@ -101,6 +108,16 @@ class App extends Component {
     }
   }
 
+  resetGame() {
+    let resetState = { ...this.state };
+    resetState.guesses = 5;
+    resetState.word = this.props.word[0];
+    resetState.wordMap = Array(this.props.word[0].length).fill();
+    resetState.guessArr = [];
+    resetState.gameOver = false;
+    return this.setState(resetState);
+  }
+
   render() {
     let word = this.state.wordMap.map((letter, idx) => {
       return <Word key={idx} letter={letter} />;
@@ -116,7 +133,7 @@ class App extends Component {
         <div className="App">
           <h1>Hangman</h1>
           <p>GameOver</p>
-          <UserInputForm handleAdd={this.handleAdd} />
+          <ResetButton reset={this.resetGame.bind(this)} />
           <div className="container">{word}</div>
         </div>
       );

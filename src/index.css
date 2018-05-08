@@ -19,3 +19,10 @@ body {
   border: black solid 1px;
   flex-grow: 1;
 }
+
+.resetButton {
+  width: 50%;
+  height: 25px;
+  background-color: red;
+  color: white;
+}
