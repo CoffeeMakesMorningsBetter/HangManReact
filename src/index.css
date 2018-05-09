@@ -16,8 +16,8 @@ body {
 }
 
 .item {
-  border: black solid 1px;
-  flex-grow: 1;
+  align-self: center;
+  border-bottom: black solid 1px;
 }
 
 .resetButton {
@@ -25,4 +25,23 @@ body {
   height: 25px;
   background-color: red;
   color: white;
+}
+
+input[type="submit"],
+input[name="guess"] {
+  border-radius: 0.15em;
+}
+
+input[type="submit"] {
+  margin-left: 1em;
+  background-color: pink;
+}
+
+input[type="submit"]:hover {
+  color: white;
+  background-color: rgb(255, 102, 204);
+}
+
+input[name="guess"]:focus {
+  outline: none;
 }
