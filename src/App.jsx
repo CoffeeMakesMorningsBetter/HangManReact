@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import HangMan from "./HangMan";
+import HangMan2 from "./HangMan2";
 import Word from "./Word";
 import ResetButton from "./ResetButton";
 import UserInputForm from "./UserInputForm";
@@ -9,18 +9,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      guesses: 5,
+      guesses: 7,
       word: this.props.word[0],
       wordMap: Array(this.props.word[0].length).fill(),
       guessArr: [],
-      gameOver: false,
-      images: [
-        "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&h=350",
-        "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg",
-        "https://wallpaperbrowse.com/media/images/soap-bubble-1958650_960_720.jpg",
-        "https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
-        "http://www.bajiroo.com/wp-content/uploads/2015/08/amazing-wonderful-macro-photography-of-nature-pics-pictures-images-photos-13.jpg"
-      ]
+      gameOver: false
     };
     this.handleAdd = this.handleAdd.bind(this);
     this.updateWordMap = this.updateWordMap.bind(this);
@@ -67,7 +60,7 @@ class App extends Component {
     } else {
       newState.guessArr.push(letter.guess);
       newState.guesses -= 1;
-      if (newState.guesses === 0) {
+      if (newState.guesses - 1 === 0) {
         newState.gameOver = true;
         return this.setState(newState);
       }
@@ -78,7 +71,7 @@ class App extends Component {
   // How Can I clean this up
   resetGame() {
     let resetState = { ...this.state };
-    resetState.guesses = 5;
+    resetState.guesses = 7;
     resetState.word = this.props.word[0];
     resetState.wordMap = Array(this.props.word[0].length).fill();
     resetState.guessArr = [];
@@ -91,9 +84,9 @@ class App extends Component {
       return <Word key={idx} letter={letter} />;
     });
     let status =
-      this.state.gameOver === false && this.state.guesses !== 0
-        ? `You have ${this.state.guesses}`
-        : this.state.gameOver && this.state.guesses > 0
+      this.state.gameOver === false && this.state.guesses - 1 !== 0
+        ? `You have ${this.state.guesses - 1}`
+        : this.state.gameOver && this.state.guesses - 1 > 0
           ? `Congrats You Won`
           : "Game Over";
     // Is this proper place to keep track of gameStatus
@@ -103,7 +96,7 @@ class App extends Component {
           <h1>Hangman</h1>
           <p>{status}</p>
           <ResetButton reset={this.resetGame.bind(this)} />
-          <div className="container">{word}</div>
+          <div className="words">{word}</div>
         </div>
       );
     } else {
@@ -112,14 +105,8 @@ class App extends Component {
           <h1>Hangman</h1>
           <p>{status}</p>
           <UserInputForm handleAdd={this.handleAdd} />
-          <div className="container">{word}</div>
-          {/* NOT SURE IF THIS IS  CORRECT WAY TO IMPLEMENT*/}
-          <HangMan
-            image={this.state.images.slice(
-              0,
-              this.state.images.length - this.state.guesses
-            )}
-          />
+          <div className="words">{word}</div>
+          <HangMan2 guesses={this.state.guesses} />
         </div>
       );
     }
