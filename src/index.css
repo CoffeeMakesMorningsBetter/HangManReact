@@ -45,3 +45,9 @@ input[type="submit"]:hover {
 input[name="guess"]:focus {
   outline: none;
 }
+
+.hangman {
+  width: 200px;
+  height: 300px;
+  border: 0;
+}

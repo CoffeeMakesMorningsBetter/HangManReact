@@ -1,76 +1,9 @@
 import React, { Component } from "react";
+import HangMan from "./HangMan";
+import Word from "./Word";
+import ResetButton from "./ResetButton";
+import UserInputForm from "./UserInputForm";
 import "./App.css";
-
-const HangMan = ({ image }) => {
-  return (
-    <div>
-      <div>
-        <img src={image[0]} />
-      </div>
-      <div>
-        <img src={image[1]} />
-      </div>
-      <div>
-        <img src={image[2]} />
-      </div>
-      <div>
-        <img src={image[3]} />
-      </div>
-      <div>
-        <img src={image[4]} />
-      </div>
-    </div>
-  );
-};
-
-const Word = ({ letter }) => {
-  return <div className="item">{letter}</div>;
-};
-
-const ResetButton = ({ reset }) => {
-  return (
-    <button className="resetButton" onClick={reset}>
-      Reset Game
-    </button>
-  );
-};
-
-class UserInputForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      guess: ""
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.handleAdd({ ...this.state });
-    this.setState({ guess: "" });
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          name="guess"
-          type="text"
-          value={this.state.guess}
-          onChange={this.handleChange}
-          maxLength="1"
-          minLength="1"
-        />
-        <input type="submit" value="Make A Guess" />
-      </form>
-    );
-  }
-}
 
 class App extends Component {
   constructor(props) {
@@ -84,9 +17,9 @@ class App extends Component {
       images: [
         "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&h=350",
         "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg",
-        "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg",
-        "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg",
-        "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg"
+        "https://wallpaperbrowse.com/media/images/soap-bubble-1958650_960_720.jpg",
+        "https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350",
+        "http://www.bajiroo.com/wp-content/uploads/2015/08/amazing-wonderful-macro-photography-of-nature-pics-pictures-images-photos-13.jpg"
       ]
     };
     this.handleAdd = this.handleAdd.bind(this);
@@ -111,7 +44,7 @@ class App extends Component {
     return wordd === wordGuess;
   }
 
-  // Is this to much logic for handling add
+  // Is this to much logic for handling add?
   // should I break this out
   handleAdd(letter) {
     let newState = { ...this.state };
@@ -142,7 +75,7 @@ class App extends Component {
     }
   }
 
-  // How Can I clean up
+  // How Can I clean this up
   resetGame() {
     let resetState = { ...this.state };
     resetState.guesses = 5;
@@ -158,17 +91,17 @@ class App extends Component {
       return <Word key={idx} letter={letter} />;
     });
     let status =
-      this.state.guess !== 0
-        ? `You have ${this.state.guesses} left`
-        : this.state.gameOver
-          ? "You Won"
-          : "GameOver";
+      this.state.gameOver === false && this.state.guesses !== 0
+        ? `You have ${this.state.guesses}`
+        : this.state.gameOver && this.state.guesses > 0
+          ? `Congrats You Won`
+          : "Game Over";
     // Is this proper place to keep track of gameStatus
     if (this.state.gameOver) {
       return (
         <div className="App">
           <h1>Hangman</h1>
-          <p>GameOver</p>
+          <p>{status}</p>
           <ResetButton reset={this.resetGame.bind(this)} />
           <div className="container">{word}</div>
         </div>
@@ -179,13 +112,14 @@ class App extends Component {
           <h1>Hangman</h1>
           <p>{status}</p>
           <UserInputForm handleAdd={this.handleAdd} />
+          <div className="container">{word}</div>
+          {/* NOT SURE IF THIS IS  CORRECT WAY TO IMPLEMENT*/}
           <HangMan
             image={this.state.images.slice(
               0,
               this.state.images.length - this.state.guesses
             )}
           />
-          <div className="container">{word}</div>
         </div>
       );
     }
